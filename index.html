@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>計算ツール</title>
+
+<link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').then(() => {
+        console.log('Service Worker 登録成功');
+      }).catch((err) => {
+        console.log('Service Worker 登録失敗:', err);
+      });
+    });
+  }
+</script>
+
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        input { width: 80px; padding: 5px; margin: 5px; }
+        button { padding: 10px 20px; margin-top: 10px; }
+        .result { margin-top: 15px; font-weight: bold; }
+    </style>
+    <script>
+        function calculate() {
+            let payout = parseFloat(document.getElementById("payout").value);
+            let remaining = parseFloat(document.getElementById("remaining").value);
+            let unitUsage = parseFloat(document.getElementById("unitUsage").value);
+            
+            if (isNaN(payout) || isNaN(remaining) || isNaN(unitUsage) || unitUsage === 0) {
+                document.getElementById("result").innerText = "エラー: 正しい数値を入力してください";
+                return;
+            }
+            
+            let usage = payout - remaining;
+            let normalCount = Math.floor(usage / unitUsage);
+            let remainder = usage % unitUsage;
+            
+            // 余りがある場合のみ +1
+            if (remainder > 0) {
+                normalCount += 1;
+            }
+            
+            // 「0Kg（1回）を含む」を常に表示
+            let normalCountText = normalCount + " 回 (0Kg（1回）を含む)";
+            
+            // ラスト回数は常に2回とする
+            let lastCount = 2;
+            let lastWeight = remainder > 0 ? remainder : unitUsage;
+            
+            // 合計回数 = 通常回数 + ラスト回数
+            let totalCount = normalCount + lastCount;
+            
+            document.getElementById("result").innerHTML =
+                "通常回数: " + normalCountText + "<br>" +
+                "ラスト回数: " + lastCount + " 回 (" + lastWeight + " kg)<br>" +
+                "合計回数: " + totalCount + " 回";
+        }
+    </script>
+</head>
+<body>
+    <h2>計算ツール</h2>
+    <label>払出量 (kg): <input type="number" id="payout" placeholder="入力"></label><br>
+    <label>残量 (kg): <input type="number" id="remaining" placeholder="入力"></label><br>
+    <label>1回の使用量 (kg): <input type="number" id="unitUsage" value="240"></label><br>
+    <button onclick="calculate()">計算</button>
+    <h3 class="result" id="result">結果: -</h3>
+</body>
+</html>
