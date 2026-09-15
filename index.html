@@ -67,5 +67,18 @@
     <label>1回の使用量 (kg): <input type="number" id="unitUsage" value="240"></label><br>
     <button onclick="calculate()">計算</button>
     <h3 class="result" id="result">結果: -</h3>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((registration) => {
+            console.log('ServiceWorker 登録成功:', registration.scope);
+          })
+          .catch((error) => {
+            console.log('ServiceWorker 登録失敗:', error);
+          });
+      });
+    }
+  </script>  
 </body>
 </html>
