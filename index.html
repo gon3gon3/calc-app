@@ -4,18 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>スタンプ回数</title>
 
-<link rel="manifest" href="manifest.json">
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js').then(() => {
-        console.log('Service Worker 登録成功');
-      }).catch((err) => {
-        console.log('Service Worker 登録失敗:', err);
-      });
-    });
-  }
-</script>
+    <link rel="manifest" href="manifest.json">
 
     <style>
         body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
@@ -67,6 +56,7 @@
     <label>1回の使用量 (kg): <input type="number" id="unitUsage" value="240"></label><br>
     <button onclick="calculate()">計算</button>
     <h3 class="result" id="result">結果: -</h3>
+
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -79,6 +69,6 @@
           });
       });
     }
-  </script>  
+  </script>
 </body>
 </html>
